@@ -56,54 +56,57 @@ class auma_ac01():
     def cmd_auma(self):
         res=''     
         
-        if self.cmd[13]=='1'and self.cmd[12]=='0' and  self.cmd[11]=='0' and self.cmd[10]=='0':
+        if self.cmd[9]=='1'and self.cmd[8]=='0' and  self.cmd[7]=='0' and self.cmd[6]=='0':
             print("Open") 
             if self.position<1000 :
                 self.position = self.position + 100
-                self.status[12]= '1'
-                self.status[13]= '0'
-            
+                self.status[5]= '1'
+                self.status[6]= '0'
+                self.status[7]= '0'
         
-        if self.cmd[13]=='0'and self.cmd[12]=='1' and  self.cmd[11]=='0' and self.cmd[10]=='0':
+        if self.cmd[9]=='0'and self.cmd[8]=='1' and  self.cmd[7]=='0' and self.cmd[6]=='0':
             print("close")
             if self.position>0 :
                 self.position = self.position - 100
-                self.status[13]= '1'
-                self.status[12]= '0' 
-         
-        if self.cmd[13]=='0'and self.cmd[12]=='0' and  self.cmd[11]=='1' and self.cmd[10]=='0':
+                self.status[6]= '1'
+                self.status[5]= '0' 
+                self.status[7]= '0'
+        if self.cmd[9]=='0'and self.cmd[8]=='0' and  self.cmd[7]=='1' and self.cmd[6]=='0':
             print("ust")
             if self.position<self.position_in:
                 self.position = self.position+100
-                self.status[12]= '1'
-                self.status[13]= '0'
+                self.status[5]= '1'
+                self.status[6]= '0'
                 self.status[9]= '0'
                 self.status[8]= '0'
+                self.status[7]= '0'
             if self.position>self.position_in:
                 self.position = self.position-100
-                self.status[12]= '0'
-                self.status[13]= '1'
+                self.status[5]= '0'
+                self.status[6]= '1'
                 self.status[9]= '0'
                 self.status[8]= '0'
+                self.status[7]= '0'
             if self.position==self.position_in:
-                self.status[12]= '0'
-                self.status[13]= '0'
+                self.status[7]= '1'
+                self.status[5]= '0'
+                self.status[6]= '0'
 
-        if self.cmd[13]=='0'and self.cmd[12]=='0' and  self.cmd[11]=='0' and self.cmd[10]=='1':
+        if self.cmd[9]=='0'and self.cmd[8]=='0' and  self.cmd[7]=='0' and self.cmd[6]=='1':
             print("reset")
 
 
         if self.position==1000:
-            self.status[8]= '1' 
-            self.status[9]= '0' 
-            self.status[12]= '0'
-            self.status[13]= '0'
+            self.status[8]= '0' 
+            self.status[9]= '1' 
+            self.status[5]= '0'
+            self.status[6]= '0'
 
         if self.position==0:
-            self.status[8] = '0' 
-            self.status[9] = '1' 
-            self.status[12] = '0'
-            self.status[13] = '0'
+            self.status[8] = '1' 
+            self.status[9] = '0' 
+            self.status[5] = '0'
+            self.status[6] = '0'
 
         for i in self.status:
             res = res+i        
@@ -143,10 +146,13 @@ def run_server():
     #StartTcpServer(context, identity=identity, address=('0.0.0.0', 5020))
     interval = 2
     auma_all = []
-    #server = ModbusTcpServer(context, identity=identity,
-    #                        address=('0.0.0.0', 5020))
-
-    server =ModbusSerialServer(context, identity=identity, port='com1', framer=ModbusRtuFramer)                        
+    server = ModbusTcpServer(context, identity=identity,
+                            address=('0.0.0.0', 502))
+    # StartTcpServer(context, identity=identity, address=("localhost", 5020),
+    # framer=ModbusRtuFramer)
+    #server =ModbusTcpServer(context, identity=identity, address=("localhost", 5020), framer=ModbusRtuFramer)
+    #server =ModbusTcpServer(context, identity=identity, port='com1', framer=ModbusRtuFramer)
+    #server =ModbusSerialServer(context, identity=identity, port='com1', framer=ModbusRtuFramer)                        
     t = threading.Thread(target=server.serve_forever, daemon=True)
     t.start()
     global init_classes
