@@ -59,38 +59,38 @@ class auma_ac01():
         if self.cmd[9]=='1'and self.cmd[8]=='0' and  self.cmd[7]=='0' and self.cmd[6]=='0':
             print("Open") 
             if self.position<1000 :
-                self.position = self.position + 100
+                self.position = self.position + 10
+                self.status[4]= '0'
                 self.status[5]= '1'
-                self.status[6]= '0'
                 self.status[7]= '0'
         
         if self.cmd[9]=='0'and self.cmd[8]=='1' and  self.cmd[7]=='0' and self.cmd[6]=='0':
             print("close")
             if self.position>0 :
-                self.position = self.position - 100
-                self.status[6]= '1'
-                self.status[5]= '0' 
+                self.position = self.position - 10
+                self.status[5]= '0'
+                self.status[4]= '1' 
                 self.status[7]= '0'
         if self.cmd[9]=='0'and self.cmd[8]=='0' and  self.cmd[7]=='1' and self.cmd[6]=='0':
             print("ust")
             if self.position<self.position_in:
-                self.position = self.position+100
+                self.position = self.position+10
+                self.status[4]= '0'
                 self.status[5]= '1'
-                self.status[6]= '0'
                 self.status[9]= '0'
                 self.status[8]= '0'
                 self.status[7]= '0'
             if self.position>self.position_in:
-                self.position = self.position-100
+                self.position = self.position-10
+                self.status[4]= '1'
                 self.status[5]= '0'
-                self.status[6]= '1'
                 self.status[9]= '0'
                 self.status[8]= '0'
                 self.status[7]= '0'
             if self.position==self.position_in:
                 self.status[7]= '1'
+                self.status[4]= '0'
                 self.status[5]= '0'
-                self.status[6]= '0'
 
         if self.cmd[9]=='0'and self.cmd[8]=='0' and  self.cmd[7]=='0' and self.cmd[6]=='1':
             print("reset")
@@ -99,14 +99,19 @@ class auma_ac01():
         if self.position==1000:
             self.status[8]= '0' 
             self.status[9]= '1' 
+            self.status[4]= '0'
             self.status[5]= '0'
-            self.status[6]= '0'
 
         if self.position==0:
             self.status[8] = '1' 
             self.status[9] = '0' 
+            self.status[4] = '0'
             self.status[5] = '0'
-            self.status[6] = '0'
+
+        if self.position==self.position_in:
+                self.status[7]= '1'
+                self.status[4]= '0'
+                self.status[5]= '0'    
 
         for i in self.status:
             res = res+i        
